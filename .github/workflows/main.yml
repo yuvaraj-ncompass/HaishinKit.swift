@@ -27,12 +27,11 @@ jobs:
 
           # Neither forget the -b opt,
           # the feature/x ref is ambiguous at this stage
-          git checkout -b feature/x origin/feature/x
-          git merge --no-edit upstream/feature/x
-          git push origin feature/x
+          git merge --no-edit upstream/main
+          git push origin main
 
-          git checkout master
+          git checkout main
           git merge --no-edit upstream/master
-          git push origin master
+          git push origin main
 
           # etc
