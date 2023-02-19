@@ -1,13 +1,15 @@
 import AVFoundation
 import Foundation
 
-/// flash.net.Responder for Swift
-open class Responder {
+/// The RTMPResponder class provides to use handle RTMPConnection's callback.
+open class RTMPResponder {
+    /// A Handler represents RTMPResponder's callback function.
     public typealias Handler = (_ data: [Any?]) -> Void
 
     private var result: Handler
     private var status: Handler?
 
+    /// Creates a new RTMPResponder object.
     public init(result: @escaping Handler, status: Handler? = nil) {
         self.result = result
         self.status = status
@@ -213,7 +215,7 @@ open class RTMPConnection: EventDispatcher {
     var sequence: Int64 = 0
     var bandWidth: UInt32 = 0
     var streamsmap: [UInt16: UInt32] = [:]
-    var operations: [Int: Responder] = [:]
+    var operations: [Int: RTMPResponder] = [:]
     var windowSizeC: Int64 = RTMPConnection.defaultWindowSizeS {
         didSet {
             guard socket.connected else {
@@ -271,7 +273,7 @@ open class RTMPConnection: EventDispatcher {
     }
 
     /// Calls a command or method on RTMP Server.
-    open func call(_ commandName: String, responder: Responder?, arguments: Any?...) {
+    open func call(_ commandName: String, responder: RTMPResponder?, arguments: Any?...) {
         guard connected else {
             return
         }
@@ -312,9 +314,8 @@ open class RTMPConnection: EventDispatcher {
         var outputBufferSize: Int = 0
         for stream in streams {
             // in bytes.
-            outputBufferSize += Int(stream.mixer.videoIO.codec.bitrate + stream.mixer.audioIO.codec.bitrate) / 8
+            outputBufferSize += Int(stream.mixer.videoIO.codec.settings.bitRate + stream.mixer.audioIO.codec.settings.bitRate) / 8
         }
-        print(outputBufferSize, socket.outputBufferSize)
         if socket.outputBufferSize < outputBufferSize {
             socket.outputBufferSize = outputBufferSize
         }
@@ -345,7 +346,7 @@ open class RTMPConnection: EventDispatcher {
     }
 
     func createStream(_ stream: RTMPStream) {
-        let responder = Responder(result: { data -> Void in
+        let responder = RTMPResponder(result: { data -> Void in
             guard let id: Double = data[0] as? Double else {
                 return
             }
