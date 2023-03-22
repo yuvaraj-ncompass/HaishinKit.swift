@@ -33,8 +33,6 @@ public protocol RTMPConnectionDelegate: AnyObject {
     func connection(_ connection: RTMPConnection, publishSufficientBWOccured stream: RTMPStream)
     /// Tells the receiver to update statistics.
     func connection(_ connection: RTMPConnection, updateStats stream: RTMPStream)
-    /// Tells the receiver to the stream opend.
-    func connection(_ connection: RTMPConnection, didClear stream: RTMPStream)
 }
 
 // MARK: -
@@ -244,24 +242,10 @@ open class RTMPConnection: EventDispatcher {
     }
     var windowSizeS: Int64 = RTMPConnection.defaultWindowSizeS
     var currentTransactionId: Int = 0
-
-    private var _audioEngine: AVAudioEngine?
-    var audioEngine: AVAudioEngine! {
-        get {
-            if _audioEngine == nil {
-                _audioEngine = AVAudioEngine()
-            }
-            return _audioEngine
-        }
-        set {
-            _audioEngine = newValue
-        }
-    }
-
     private var timer: Timer? {
         didSet {
             oldValue?.invalidate()
-            if let timer: Timer = timer {
+            if let timer = timer {
                 RunLoop.main.add(timer, forMode: .common)
             }
         }
@@ -493,7 +477,7 @@ open class RTMPConnection: EventDispatcher {
             previousQueueBytesOut.removeFirst()
         }
         for stream in streams {
-            delegate?.connection(self, didClear: stream)
+            delegate?.connection(self, updateStats: stream)
         }
     }
 }

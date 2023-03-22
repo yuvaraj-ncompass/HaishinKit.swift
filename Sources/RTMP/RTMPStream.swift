@@ -451,6 +451,7 @@ open class RTMPStream: NetStream {
             currentFPS = 0
             frameCount = 0
             info.clear()
+            delegate?.streamDidOpen(self)
             for message in messages {
                 rtmpConnection.currentTransactionId += 1
                 message.streamId = id
@@ -472,7 +473,7 @@ open class RTMPStream: NetStream {
             audioTimestamp = 0
             audioTimestampZero = -1.0
             mixer.delegate = self
-            mixer.startDecoding(rtmpConnection.audioEngine)
+            mixer.startDecoding()
         case .publish:
             muxer.dispose()
             muxer.delegate = self
