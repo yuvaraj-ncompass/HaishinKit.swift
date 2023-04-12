@@ -75,9 +75,11 @@ if #available(iOS 13.0, *) {
 |-|[HKView](https://shogo4405.github.io/HaishinKit.swift/Classes/HKView.html)|[PiPHKView](https://shogo4405.github.io/HaishinKit.swift/Classes/PiPHKView.html)|[MTHKView](https://shogo4405.github.io/HaishinKit.swift/Classes/MTHKView.html)|
 |-|:---:|:---:|:---:|
 |Engine|AVCaptureVideoPreviewLayer|AVSampleBufferDisplayLayer|Metal|
-|Publish|○|◯|○|
-|Playback|×|◯|○|
-|VisualEffect|×|◯|○|
+|Publish|◯|◯|◯|
+|Playback|×|◯|◯|
+|VisualEffect|×|◯|◯|
+|PictureInPicture|×|◯|×|
+|MultiCamera|×|◯|◯|
 
 ### Others
 - [x] [Support multitasking camera access.](https://developer.apple.com/documentation/avfoundation/capture_setup/accessing_the_camera_while_multitasking)
@@ -92,6 +94,7 @@ if #available(iOS 13.0, *) {
 ## 🌏 Requirements
 |-|iOS|OSX|tvOS|Xcode|Swift|
 |:----:|:----:|:----:|:----:|:----:|:----:|
+|main|11.0+|10.13+|10.2+|14.3+|5.8+|
 |1.4.0+|11.0+|10.13+|10.2+|14.0+|5.7+|
 |1.3.0+|11.0+|10.13+|10.2+|14.0+|5.7+|
 |1.2.0+|9.0+|10.11+|10.2+|13.0+|5.5+|
@@ -103,6 +106,7 @@ Examples project are available for iOS with UIKit, iOS with SwiftUI, macOS and t
 ```sh
 git clone https://github.com/shogo4405/HaishinKit.swift.git
 cd HaishinKit.swift
+git checkout refs/tags/1.4.5
 carthage bootstrap --use-xcframeworks
 open HaishinKit.xcodeproj
 ```
