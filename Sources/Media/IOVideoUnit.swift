@@ -21,7 +21,7 @@ final class IOVideoUnit: NSObject, IOUnit {
         }
     }
 
-    weak var drawable: NetStreamDrawable? {
+    weak var drawable: (any NetStreamDrawable)? {
         didSet {
             #if os(iOS) || os(macOS)
             drawable?.videoOrientation = videoOrientation
@@ -288,7 +288,7 @@ final class IOVideoUnit: NSObject, IOUnit {
 
 extension IOVideoUnit: IOUnitEncoding {
     // MARK: IOUnitEncoding
-    func startEncoding(_ delegate: AVCodecDelegate) {
+    func startEncoding(_ delegate: any AVCodecDelegate) {
         codec.delegate = delegate
         codec.startRunning()
     }
@@ -336,7 +336,7 @@ extension IOVideoUnit: VideoCodecDelegate {
     }
 
     func videoCodec(_ codec: VideoCodec, didOutput sampleBuffer: CMSampleBuffer) {
-        drawable?.enqueue(sampleBuffer)
+        mixer?.mediaLink.enqueueVideo(sampleBuffer)
     }
 
     func videoCodec(_ codec: VideoCodec, errorOccurred error: VideoCodec.Error) {
